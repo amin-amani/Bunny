@@ -1,2 +1,0 @@
-# Bunny
-Image Annotation Toolbox
