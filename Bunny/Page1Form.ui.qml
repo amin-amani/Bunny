@@ -27,12 +27,9 @@ Page {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 100
-
         spacing: 10
-
         columns: 1
         rows: 4
-
         Button {
             height: 50
             width: 200
