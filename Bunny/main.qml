@@ -16,8 +16,22 @@ Rectangle {
           form2.setDataSetPath(path)
            console.log(datasetPath)
     }
+    function addToModel(value)
+    {
+        mymodel.append({
+                           "name": value
+                       })
 
+    }
 
+    function displayImage(src)
+    {
+    form2.displayImage(src)
+    }
+    function setImageLabel(label)
+    {
+    form2.setImageLabel(label)
+    }
     ListModel {
         id:mymodel
 
@@ -29,7 +43,7 @@ Rectangle {
         focus: true
         Keys.onPressed: {
             processManager.keyHandler(event.key)
-            console.log(event.key)
+           // console.log(event.key)
                 }
         Page1Form {
 

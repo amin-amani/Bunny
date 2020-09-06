@@ -3,7 +3,6 @@ import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.0
 import Qt.labs.folderlistmodel 2.1
 
-
 Page {
 
     width: 600
@@ -13,40 +12,44 @@ Page {
     property int i: 0
     //property list<Item> lables
     property variant userLables: [100000]
+
     //------------------------------------------------------------------
-    function nextImage() {
-
-        if(mymodel.count<1)return
-        console.log("next")
-        i = i + 1
-        testImage.source = path + "/" + folderModel.get(i, "fileName")
-        //imageLable.text=mymodel[userLables[i]]
-        console.log(userLables[i])
-
+    function displayImage(src) {
+        classifyImage.source = src
     }
-
-    function prevImage() {
-        if(mymodel.count<1)return
-        console.log("prev")
-        i = i - 1
-        testImage.source = path + "/" + folderModel.get(i, "fileName")
-        //imageLable.text=mymodel[userLables[i]]
-      console.log(userLables[i])
+    function setImageLabel(label) {
+        imageLable.text = label
     }
+    //    function nextImage() {
+
+    //        if(mymodel.count<1)return
+    //        console.log("next")
+    //        i = i + 1
+    //        testImage.source = path + "/" + folderModel.get(i, "fileName")
+    //        //imageLable.text=mymodel[userLables[i]]
+    //        console.log(userLables[i])
+
+    //    }
+
+    //    function prevImage() {
+    //        if(mymodel.count<1)return
+    //        console.log("prev")
+    //        i = i - 1
+    //        testImage.source = path + "/" + folderModel.get(i, "fileName")
+    //        //imageLable.text=mymodel[userLables[i]]
+    //      console.log(userLables[i])
+    //    }
     function setClass(x) {
 
         console.log("class " + (x - 48))
-        userLables[i]=x-48
-
+        userLables[i] = x - 48
     }
     function setDataSetPath(msg) {
         folderModel.folder = msg
         console.log(folderModel.columnCount())
         path = msg
     }
-    function buttonPressed(btn) {
-        console.log(btn)
-    }
+
     //------------------------------------------------------------------
     ListView {
 
@@ -54,22 +57,21 @@ Page {
             id: folderModel
             //folder: datasetPath
             nameFilters: ["*.jpg"]
-            onFolderChanged: testImage.source = path + "/" + folderModel.get(
-                                 0, "fileName")
+            //onFolderChanged: testImage.source = path + "/" + folderModel.get(0, "fileName")
         }
 
         model: folderModel
     }
 
     BorderImage {
-        id: testImage
+        id: classifyImage
         anchors.centerIn: parent
         source: "images/bugs_bunny.jpeg"
         Text {
-            id:imageLable
+            id: imageLable
             anchors.bottom: parent.top
             text: qsTr("text")
-            font.pointSize:12
+            font.pointSize: 12
         }
         MouseArea {
             anchors.fill: parent
@@ -92,7 +94,9 @@ Page {
             model: mymodel.count
             Button {
                 text: mymodel.get(index).name
-                onClicked: buttonPressed(mymodel.get(index).name)
+                onClicked: processManager.classifyButtonClicked(
+                               mymodel.get(
+                                   index).name) //buttonPressed(mymodel.get(index).name)
             }
         }
     }

@@ -7,6 +7,8 @@
 #include <QMetaObject>
 #include <QtQuick/QQuickView>
 #include <QApplication>
+#include <QDir>
+#include <QDirIterator>
 
 
 class UI : public QObject
@@ -14,6 +16,12 @@ class UI : public QObject
     Q_OBJECT
 QString frontStatus="Not connected";
 QString rearStatus="Not connected";
+QStringList _classifyList;
+QStringList _fileList;
+QStringList _labels;
+QString _lastLable;
+int currentIndex=0;
+
      QSettings settings;//("nojan", "Star Runner");
 public:
     QQuickItem *RootObject=nullptr;
@@ -21,19 +29,25 @@ public:
     explicit UI(QObject *parent = nullptr);
 
     Q_INVOKABLE void btnClicked();
-    Q_INVOKABLE void startBtnClicked();
-    Q_INVOKABLE void stopBtnClicked();
     Q_INVOKABLE void keyHandler(int key);
+    Q_INVOKABLE void addClassifyClasses(QString key);
+    Q_INVOKABLE void remveClassifyClasses();
+    Q_INVOKABLE void saveResult();
+    Q_INVOKABLE void classifyButtonClicked(QString name);
+
+    Q_INVOKABLE void setDatasetPath(QString path);
     Q_INVOKABLE void closeApp();
     void Init();
     void LoadDefualtSettings();
     void SetDatasetPath(QString path);
+    void AppendToClassifyModel(QString value);
+    void LoadClassifyModel();
+    void DisplayImage(QString src);
+    void SetImageLabel(QString lable);
 signals:
-void StartSorting();
-void StoptSorting();
+
 public slots:
-  void RearCameraReady();
-  void FrontCameraReady();
+
   void DisplayDeviceStatus(QString camF, QString camR, QString board);
   void DisplayProgressBar(bool status, bool visibility);
   void uiLog(QString message);

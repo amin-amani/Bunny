@@ -21,6 +21,7 @@ Page {
         width: parent.width
         onAccepted: {
             datasetPath = fileUrl
+            processManager.setDatasetPath(fileUrl)
         }
     }
     Grid {
@@ -51,6 +52,7 @@ Page {
                     mymodel.append({
                                        "name": classNameInput.text
                                    })
+                    processManager.addClassifyClasses(classNameInput.text)
                     classNameInput.text = ""
                 }
             }
@@ -70,7 +72,20 @@ Page {
                 text: "Clear List"
                 onClicked: {
                     mymodel.clear()
+                    processManager.remveClassifyClasses()
                 }
+
+
+            }
+
+            Button {
+                text: "save List"
+                onClicked: {
+
+                    processManager.saveResult()
+                }
+
+
             }
         }
 
