@@ -9,6 +9,8 @@ UI::UI(QObject *parent) : QObject(parent)
 
 void UI::Init()
 {
+
+    //  settings.setValue("DatasetPath", "/home/amin/dataset");
     qDebug()<<"INIT START";
     //    QVariant returnedValue ;
     QMetaObject::invokeMethod((QObject*)RootObject, "qmlFunc",
@@ -18,7 +20,6 @@ void UI::Init()
                               );
     //    uiLog("hello");
     View->show();//showFullScreen();
-    DisplaySortResults(0,0,0,0);
     DisplayDeviceStatus("Loading...", "Loading...", "Loading...");
     DisplayProgressBar(true, false);
     LoadDefualtSettings();
@@ -27,38 +28,16 @@ void UI::Init()
 void UI::LoadDefualtSettings()
 {
 
-SetDatasetPath("/home/amin/dataset");
+    SetDatasetPath( settings.value("DatasetPath").toString());
 
 }
 void UI::SetDatasetPath(QString path)
 {
-
-
-
-            QMetaObject::invokeMethod((QObject*)RootObject, "setDatasetAddress",
-
-                                      Q_ARG(QVariant, path)
-                                      );
-  }
-
-void UI::DisplaySortResults(int Perfect, int garbage, int baste, int total)
-{
-    double percentage=Perfect;
-    percentage/=total;
-
-    QMetaObject::invokeMethod((QObject*)RootObject, "displaySortResult",
-                              //                              Q_RETURN_ARG(QVariant, returnedValue),
-//                              Q_ARG(QVariant,QString::number((1-percentage)*100)),
-//                              Q_ARG(QVariant,(1-percentage)*100),
-//                              Q_ARG(QVariant,percentage),
-//                              Q_ARG(QVariant,"10")
-                              Q_ARG(QVariant, Perfect),
-                              Q_ARG(QVariant, garbage),
-                              Q_ARG(QVariant, baste),
-                              Q_ARG(QVariant, total)
-//                              Q_ARG(QVariant,"10")
+    QMetaObject::invokeMethod((QObject*)RootObject, "setDatasetAddress",
+                              Q_ARG(QVariant, path)
                               );
 }
+
 
 
 void UI::DisplayDeviceStatus(QString camF, QString camR, QString board)
@@ -116,17 +95,22 @@ void UI::stopBtnClicked()
     return;
 }
 
+void UI::keyHandler(int key)
+{
+    qDebug()<<"clicked:"<<key;
+}
+
 void UI::RearCameraReady()
 {
-//    qDebug()<<"==================================>INJA";
-rearStatus="Connected!";
-DisplayDeviceStatus(frontStatus,rearStatus,"Connected!");
+    //    qDebug()<<"==================================>INJA";
+    rearStatus="Connected!";
+    DisplayDeviceStatus(frontStatus,rearStatus,"Connected!");
 }
 
 void UI::FrontCameraReady()
 {
-//    qDebug()<<"==================================>INJA2";
-frontStatus="Connected!";
-DisplayDeviceStatus(frontStatus,rearStatus,"Connected!");
+    //    qDebug()<<"==================================>INJA2";
+    frontStatus="Connected!";
+    DisplayDeviceStatus(frontStatus,rearStatus,"Connected!");
 }
 

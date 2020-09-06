@@ -28,19 +28,9 @@ Rectangle {
         currentIndex:0// tabBar.currentIndex
         focus: true
         Keys.onPressed: {
+            processManager.keyHandler(event.key)
             console.log(event.key)
-            if(event.key=== Qt.Key_Backspace)
-            {
-                form2.prevImage();
-            }
-            if(event.key=== Qt.Key_Space || 16777220 === event.key/*enter*/)
-            {
-                form2.nextImage();
-            }
-            if(event.key>=48 && event.key<=57  )
-
-                form2.setClass(event.key);
-             }
+                }
         Page1Form {
 
 
