@@ -8,6 +8,11 @@ Rectangle {
 
     //title: qsTr("Bunny image annotator V1.0")
     property  string datasetPath: "..."
+    function chartAddSeries(name,value)
+
+    {
+        staticPage.chartAddSeires(name,value)
+    }
 
 
     function setDatasetAddress(path)
@@ -53,6 +58,10 @@ Rectangle {
         Page2Form {
             id:form2
 
+        }
+        StaticsPage {
+
+        id:staticPage
         }
         onCurrentIndexChanged: {
             form2.setDataSetPath(datasetPath)

@@ -1,4 +1,5 @@
 #include "UI.h"
+
 //================================================================================
 UI::UI(QObject *parent) : QObject(parent)
 {
@@ -23,6 +24,21 @@ void UI::Init()
     LoadDefualtSettings();
 
 }
+QStringList UI::GetDtatSetFilesList(QString path)
+{
+    QStringList result;
+    QDirIterator directoryIterator(path, QDirIterator::Subdirectories);
+    while (directoryIterator.hasNext())
+    {
+        QString fname= directoryIterator.next();
+        if(fname.contains("/."))
+            continue;
+        qDebug()<<fname;
+        result.append(fname);
+        _labels.append("NAN");
+    }
+    return result;
+}
 //================================================================================
 void UI::LoadDefualtSettings()
 {
@@ -30,20 +46,10 @@ void UI::LoadDefualtSettings()
     SetDatasetPath( settings.value("DatasetPath").toString());
     LoadClassifyModel();
     QString path= settings.value("DatasetPath").toString();
-
-    QDirIterator directoryIterator(settings.value("DatasetPath").toString().remove(0,7), QDirIterator::Subdirectories);
-    _fileList.clear();
-    qDebug()<<"++++++++++++++++++++++";
-    while (directoryIterator.hasNext())
-    {
-        QString fname= directoryIterator.next();
-        if(fname.contains("/."))
-            continue;
-        qDebug()<<fname;
-        _fileList.append(fname);
-        _labels.append("NAN");
-    }
-    DisplayImage(_fileList[currentIndex]);
+    _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString().remove(0,7));
+     DisplayImage(_fileList[currentIndex]);
+    ChartAddSeries("goo",20);
+    ChartAddSeries("non",80);
 }
 //================================================================================
 
@@ -80,6 +86,16 @@ void UI::SetImageLabel(QString lable)
 
     QMetaObject::invokeMethod((QObject*)RootObject, "setImageLabel",
                               Q_ARG(QVariant, lable)
+                              );
+}
+//================================================================================
+
+void UI::ChartAddSeries(QString name,float value)
+
+{
+    QMetaObject::invokeMethod((QObject*)RootObject, "chartAddSeries",
+                              Q_ARG(QVariant, name),
+                              Q_ARG(QVariant, value )
                               );
 }
 //================================================================================

@@ -44,6 +44,8 @@ public:
     void LoadClassifyModel();
     void DisplayImage(QString src);
     void SetImageLabel(QString lable);
+    void ChartAddSeries(QString name, float value);
+    QStringList GetDtatSetFilesList(QString path);
 signals:
 
 public slots:
