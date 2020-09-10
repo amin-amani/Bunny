@@ -142,19 +142,18 @@ void UI::closeApp()
 void UI::keyHandler(int key)
 {
     if(16777220==key){//enter
-        _labels[currentIndex]=_lastLable;
+
         if(currentIndex<_fileList.count()-1)currentIndex++;
 
         SetImageLabel(_labels[currentIndex]);
         DisplayImage(_fileList[currentIndex]);
-        qDebug()<<"index:"<<currentIndex;
-        return;
+         return;
     }
     if(16777219==key){//backspace
         if(currentIndex>0)currentIndex--;
          SetImageLabel(_labels[currentIndex]);
         DisplayImage(_fileList[currentIndex]);
-        qDebug()<<"index:"<<currentIndex;
+
         return;
     }
     if(key>48 && key<58)
@@ -163,6 +162,7 @@ void UI::keyHandler(int key)
         {
             _lastLable=  _classifyList[key-49];
             SetImageLabel(_lastLable);
+            _labels[currentIndex]=_lastLable;
         }
 
     }
