@@ -33,6 +33,8 @@
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
+    a.setOrganizationName("nojan");
+    a.setOrganizationDomain("tehran");
     /////// UI PART
      UI *ui=new UI();
 

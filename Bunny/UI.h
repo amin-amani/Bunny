@@ -10,19 +10,19 @@
 #include <QDir>
 #include <QDirIterator>
 
-
+#define KEY_ENTER 16777220
+#define KEY_BACKSPACE 16777219
 class UI : public QObject
 {
     Q_OBJECT
-QString frontStatus="Not connected";
-QString rearStatus="Not connected";
-QStringList _classifyList;
-QStringList _fileList;
-QStringList _labels;
-QString _lastLable;
-int currentIndex=0;
 
-     QSettings settings;//("nojan", "Star Runner");
+    QStringList _classifyList;
+    QStringList _fileList;
+    QStringList _labels;
+    QString _lastLable;
+    int _currentIndex=0;
+
+    QSettings settings;
 public:
     QQuickItem *RootObject=nullptr;
     QQuickView  *View=nullptr;
@@ -34,7 +34,6 @@ public:
     Q_INVOKABLE void remveClassifyClasses();
     Q_INVOKABLE void saveResult();
     Q_INVOKABLE void classifyButtonClicked(QString name);
-
     Q_INVOKABLE void setDatasetPath(QString path);
     Q_INVOKABLE void closeApp();
     void Init();
@@ -49,13 +48,12 @@ public:
     void UpdateStatic();
     void ChartClera();
     void ShowChartMetrics(QString metics);
+    bool LoadLabels(QString path);
 signals:
 
 public slots:
 
-  void DisplayDeviceStatus(QString camF, QString camR, QString board);
-  void DisplayProgressBar(bool status, bool visibility);
-  void uiLog(QString message);
+    void uiLog(QString message);
 };
 
 

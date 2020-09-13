@@ -20,25 +20,7 @@ Page {
     function setImageLabel(label) {
         imageLable.text = label
     }
-    //    function nextImage() {
 
-    //        if(mymodel.count<1)return
-    //        console.log("next")
-    //        i = i + 1
-    //        testImage.source = path + "/" + folderModel.get(i, "fileName")
-    //        //imageLable.text=mymodel[userLables[i]]
-    //        console.log(userLables[i])
-
-    //    }
-
-    //    function prevImage() {
-    //        if(mymodel.count<1)return
-    //        console.log("prev")
-    //        i = i - 1
-    //        testImage.source = path + "/" + folderModel.get(i, "fileName")
-    //        //imageLable.text=mymodel[userLables[i]]
-    //      console.log(userLables[i])
-    //    }
     function setClass(x) {
 
         console.log("class " + (x - 48))
@@ -46,7 +28,7 @@ Page {
     }
     function setDataSetPath(msg) {
         folderModel.folder = msg
-        console.log(folderModel.columnCount())
+        //console.log(folderModel.columnCount())
         path = msg
     }
 

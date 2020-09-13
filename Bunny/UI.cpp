@@ -1,5 +1,4 @@
 #include "UI.h"
-
 //================================================================================
 UI::UI(QObject *parent) : QObject(parent)
 {
@@ -8,51 +7,79 @@ UI::UI(QObject *parent) : QObject(parent)
 //================================================================================
 void UI::Init()
 {
-
-    qDebug()<<"INIT START";
-    //    QVariant returnedValue ;
-    QMetaObject::invokeMethod((QObject*)RootObject, "qmlFunc",
-                              //                              Q_RETURN_ARG(QVariant, returnedValue),
-                              Q_ARG(QVariant,"my message")
-
-                              );
-
     View->show();
-
-    DisplayProgressBar(true, false);
     LoadDefualtSettings();
-
 }
+//================================================================================
 QStringList UI::GetDtatSetFilesList(QString path)
 {
     QStringList result;
+    QStringList filters={".jpg",".png",".bmp",".jpeg"};
     QDirIterator directoryIterator(path, QDirIterator::Subdirectories);
     while (directoryIterator.hasNext())
     {
         QString fname= directoryIterator.next();
         if(fname.contains("/."))
             continue;
-        result.append(fname);
-        _labels.append("NC");
+        for(int i=0;i<filters.count();i++){
+            if(fname.endsWith(filters[i])){
+                result.append(fname);
+                _labels.append("NC");}
+            break;
+        }
     }
     return result;
 }
 //================================================================================
+bool UI::LoadLabels(QString path)
+{
+
+    QFile file(path);
+    qDebug()<<path;
+    if(!QFile::exists(path))return false ;
+    if(!file.open(QFile::ReadWrite))return false;
+    qDebug()<<"path open ok";
+    _fileList.clear();
+    _labels.clear();
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        QStringList str = line.split('\t');
+        if(str.count()<2)return false;
+        _fileList.append(QString(str[0]).trimmed() );
+        _labels.append(QString(str[1]).trimmed() );
+    }
+
+
+    file.close();
+
+    return true;
+
+}
+//================================================================================
 void UI::LoadDefualtSettings()
 {
-    currentIndex=0;
+    _currentIndex=0;
     DisplayDatasetPath( settings.value("DatasetPath").toString());
+      if(!LoadLabels( settings.value("DatasetPath").toString()+"/result.txt"))
+    {
+
+        _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString());
+    }
+
+
     _classifyList= LoadClassifyModel(settings.value("ClassifyList").toString());
-    _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString());
+
     if(_fileList.count()<1)return;
-    DisplayImage(_fileList[currentIndex]);
+    DisplayImage(_fileList[_currentIndex]);
     ChartAddSeries("NC",100);
+
     for(int i=0;i<_classifyList.count();i++)
     {
         ChartAddSeries(_classifyList[i],0);
-
     }
-UpdateStatic();
+    UpdateStatic();
 }
 //================================================================================
 void UI::UpdateStatic()
@@ -89,21 +116,19 @@ void UI::UpdateStatic()
 
     ChartAddSeries("NC",percentage);
 
-   QString msg="Total="+QString::number(_fileList.count())+"\n";
-   for(int i=0;i<_classifyList.count();i++)
-   {
-       msg+=_classifyList[i]+":"+QString::number(values[i]) +"\t"+QString::number((values[i]*100)/_fileList.count())+"% \n";
-   }
- unclassified=totalImages-totalClassified;
-   msg+="NC:"+QString::number(unclassified)+"\t";
- msg+=QString::number((unclassified*100)/_fileList.count())+"%";
-
-
+    QString msg="Total="+QString::number(_fileList.count())+"\n";
+    for(int i=0;i<_classifyList.count();i++)
+    {
+        msg+=_classifyList[i]+":"+QString::number(values[i]) +"\t"+QString::number((values[i]*100)/_fileList.count())+"% \n";
+    }
+    unclassified=totalImages-totalClassified;
+    msg+="NC:"+QString::number(unclassified)+"\t";
+    msg+=QString::number((unclassified*100)/_fileList.count())+"%";
 
     ShowChartMetrics(msg);
+    SetImageLabel(_labels[_currentIndex]);
 }
 //================================================================================
-
 QStringList UI::LoadClassifyModel(QString settingValue)
 {
     QStringList result;
@@ -119,7 +144,6 @@ QStringList UI::LoadClassifyModel(QString settingValue)
     return result;
 }
 //================================================================================
-
 void UI::DisplayImage(QString src)
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "displayImage",
@@ -136,7 +160,6 @@ void UI::SetImageLabel(QString lable)
 }
 //================================================================================
 void UI::ChartAddSeries(QString name,float value)
-
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "chartAddSeries",
                               Q_ARG(QVariant, name),
@@ -144,16 +167,12 @@ void UI::ChartAddSeries(QString name,float value)
                               );
 }
 //================================================================================
-
 void UI::ChartClera()
-
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "chartClear"
                               );
 }
-
 //================================================================================
-
 void UI::AppendToClassifyModel(QString( value))
 {
 
@@ -163,7 +182,7 @@ void UI::AppendToClassifyModel(QString( value))
 
 
 }
-
+//================================================================================
 void UI::ShowChartMetrics(QString metics)
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "showChartMetrics",
@@ -175,24 +194,6 @@ void UI::DisplayDatasetPath(QString path)
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "setDatasetAddress",
                               Q_ARG(QVariant, path)
-                              );
-}
-//================================================================================
-void UI::DisplayDeviceStatus(QString camF, QString camR, QString board)
-{
-
-    QMetaObject::invokeMethod((QObject*)RootObject, "displayDeviceStatus",
-                              Q_ARG(QVariant, camF),
-                              Q_ARG(QVariant, camR),
-                              Q_ARG(QVariant, board)
-                              );
-}
-//================================================================================
-void UI::DisplayProgressBar(bool status, bool visibility)
-{
-    QMetaObject::invokeMethod((QObject*)RootObject, "displayProgressBar",
-                              Q_ARG(QVariant, status),
-                              Q_ARG(QVariant, visibility)
                               );
 }
 //================================================================================
@@ -214,22 +215,21 @@ void UI::closeApp()
 {
     QCoreApplication::quit();
 }
-
 //================================================================================
 void UI::keyHandler(int key)
 {
-    if(16777220==key){//enter
+    if(KEY_ENTER==key){//enter
 
-        if(currentIndex<_fileList.count()-1)currentIndex++;
+        if(_currentIndex<_fileList.count()-1)_currentIndex++;
 
-        SetImageLabel(_labels[currentIndex]);
-        DisplayImage(_fileList[currentIndex]);
+        SetImageLabel(_labels[_currentIndex]);
+        DisplayImage(_fileList[_currentIndex]);
         return;
     }
-    if(16777219==key){//backspace
-        if(currentIndex>0)currentIndex--;
-        SetImageLabel(_labels[currentIndex]);
-        DisplayImage(_fileList[currentIndex]);
+    if(KEY_BACKSPACE==key){
+        if(_currentIndex>0)_currentIndex--;
+        SetImageLabel(_labels[_currentIndex]);
+        DisplayImage(_fileList[_currentIndex]);
 
         return;
     }
@@ -239,7 +239,7 @@ void UI::keyHandler(int key)
         {
             _lastLable=  _classifyList[key-49];
             SetImageLabel(_lastLable);
-            _labels[currentIndex]=_lastLable;
+            _labels[_currentIndex]=_lastLable;
         }
         UpdateStatic();
 
@@ -247,7 +247,6 @@ void UI::keyHandler(int key)
 
 }
 //================================================================================
-
 void UI::addClassifyClasses(QString key)
 {
     _classifyList.append(key);
@@ -258,26 +257,23 @@ void UI::addClassifyClasses(QString key)
 
 }
 //================================================================================
-
 void UI::remveClassifyClasses()
 {
     settings.setValue("ClassifyList", "");
 }
 //================================================================================
-
 void UI::saveResult()
 {
-    QFile file("result.txt");
-    file.open(QFile::ReadWrite);
+    QFile file(settings.value("DatasetPath").toString()+"/result.txt");
+    if(!file.open(QFile::ReadWrite))return;
     for(int i=0;i<_fileList.count();i++)
     {
-        QString st=_fileList[i]+" "+_labels[i]+"\n";
+        QString st=_fileList[i]+"\t"+_labels[i]+"\n";
         file.write(st.toLatin1());
     }
-
+    file.close();
 }
 //================================================================================
-
 void UI::classifyButtonClicked(QString name)
 {
     SetImageLabel(name);
@@ -288,11 +284,10 @@ void UI::setDatasetPath(QString path)
     path=path.remove(0,7);
     settings.setValue("DatasetPath", path);
     qDebug()<<"c++"<<path;
-      _fileList= GetDtatSetFilesList(path);
-       DisplayImage(_fileList[currentIndex]);
+    _fileList= GetDtatSetFilesList(path);
+    DisplayImage(_fileList[_currentIndex]);
 
     DisplayDatasetPath(path);
     UpdateStatic();
 }
-
 //================================================================================
