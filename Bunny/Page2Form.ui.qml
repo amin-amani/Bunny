@@ -49,8 +49,9 @@ Page {
         id: classifyImage
         anchors.centerIn: parent
         source: "images/bugs_bunny.jpeg"
-//        width: 400
-//        height: 300
+        width: 500
+        height: 260
+        scale: Qt.KeepAspectRatio
         Text {
             id: imageLable
             anchors.bottom: parent.top
