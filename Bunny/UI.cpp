@@ -9,7 +9,6 @@ UI::UI(QObject *parent) : QObject(parent)
 void UI::Init()
 {
 
-    //  settings.setValue("DatasetPath", "/home/amin/dataset");
     qDebug()<<"INIT START";
     //    QVariant returnedValue ;
     QMetaObject::invokeMethod((QObject*)RootObject, "qmlFunc",
@@ -34,7 +33,7 @@ QStringList UI::GetDtatSetFilesList(QString path)
         if(fname.contains("/."))
             continue;
         result.append(fname);
-        _labels.append("NAN");
+        _labels.append("NC");
     }
     return result;
 }
@@ -44,7 +43,8 @@ void UI::LoadDefualtSettings()
     currentIndex=0;
     DisplayDatasetPath( settings.value("DatasetPath").toString());
     _classifyList= LoadClassifyModel(settings.value("ClassifyList").toString());
-    _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString().remove(0,7));
+    _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString());
+    if(_fileList.count()<1)return;
     DisplayImage(_fileList[currentIndex]);
     ChartAddSeries("NC",100);
     for(int i=0;i<_classifyList.count();i++)
@@ -52,8 +52,7 @@ void UI::LoadDefualtSettings()
         ChartAddSeries(_classifyList[i],0);
 
     }
-    //
-    //    ChartAddSeries("non",80);
+UpdateStatic();
 }
 //================================================================================
 void UI::UpdateStatic()
@@ -286,7 +285,14 @@ void UI::classifyButtonClicked(QString name)
 //================================================================================
 void UI::setDatasetPath(QString path)
 {
+    path=path.remove(0,7);
     settings.setValue("DatasetPath", path);
+    qDebug()<<"c++"<<path;
+      _fileList= GetDtatSetFilesList(path);
+       DisplayImage(_fileList[currentIndex]);
+
+    DisplayDatasetPath(path);
+    UpdateStatic();
 }
 
 //================================================================================

@@ -20,7 +20,7 @@ Page {
         height: parent.height
         width: parent.width
         onAccepted: {
-            datasetPath = fileUrl
+            //datasetPath = fileUrl
             processManager.setDatasetPath(fileUrl)
         }
     }
@@ -36,7 +36,6 @@ Page {
             width: 200
             onClicked: photoDirectoryFileDialog.visible = true
             text: "Brows dataset ..."
-            //testImage.source ="file:"+"../NojhanImageAnotator/dataset/Perfect_Pistachio_clean146_1.jpg"
         }
         Label {
 
@@ -74,8 +73,6 @@ Page {
                     mymodel.clear()
                     processManager.remveClassifyClasses()
                 }
-
-
             }
 
             Button {
@@ -84,8 +81,6 @@ Page {
 
                     processManager.saveResult()
                 }
-
-
             }
         }
 

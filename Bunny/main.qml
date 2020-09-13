@@ -28,7 +28,7 @@ Rectangle {
     {
             datasetPath=path
           form2.setDataSetPath(path)
-           console.log(datasetPath)
+
     }
     function addToModel(value)
     {

@@ -70,7 +70,7 @@ Page {
         Text {
             id: imageLable
             anchors.bottom: parent.top
-            text: qsTr("text")
+            text: qsTr("NC")
             font.pointSize: 12
         }
         MouseArea {
