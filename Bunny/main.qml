@@ -13,8 +13,17 @@ Rectangle {
     {
         staticPage.chartAddSeires(name,value)
     }
+    function chartClear()
 
+    {
+        staticPage.chartClear()
+    }
 
+    function showChartMetrics(text)
+    {
+         staticPage.showMerics(text)
+
+    }
     function setDatasetAddress(path)
     {
             datasetPath=path

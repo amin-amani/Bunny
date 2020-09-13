@@ -39,13 +39,16 @@ public:
     Q_INVOKABLE void closeApp();
     void Init();
     void LoadDefualtSettings();
-    void SetDatasetPath(QString path);
+    void DisplayDatasetPath(QString path);
     void AppendToClassifyModel(QString value);
-    void LoadClassifyModel();
+    QStringList LoadClassifyModel(QString settingValue);
     void DisplayImage(QString src);
     void SetImageLabel(QString lable);
     void ChartAddSeries(QString name, float value);
     QStringList GetDtatSetFilesList(QString path);
+    void UpdateStatic();
+    void ChartClera();
+    void ShowChartMetrics(QString metics);
 signals:
 
 public slots:

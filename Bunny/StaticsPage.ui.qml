@@ -9,21 +9,32 @@ Page {
 
         pieSeries.append(name, value)
     }
-    ChartView {
-        width: 400
-        height: 300
-        theme: ChartView.ChartThemeBrownSand
-        antialiasing: true
+    function chartClear() {
 
-        PieSeries {
-            id: pieSeries
+        pieSeries.clear()
+    }
+
+    function showMerics(text) {
+        metrictext.text = text
+    }
+    Column {
+        spacing: 5
+        anchors.centerIn: parent
+        ChartView {
+            width: 400
+            height: 300
+            theme: ChartView.ChartThemeBrownSand
+            antialiasing: true
+
+            PieSeries {
+                id: pieSeries
+            }
+        }
+        Text {
+
+            id: metrictext
+            anchors.margins: 10
+            text: qsTr("...")
         }
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
-
