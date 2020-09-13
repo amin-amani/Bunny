@@ -7,7 +7,11 @@ UI::UI(QObject *parent) : QObject(parent)
 //================================================================================
 void UI::Init()
 {
-    View->show();
+    //View->setMaximumSize(QSize(800,600));
+    View->setFlag(Qt::WindowCloseButtonHint);
+    View->showNormal();
+
+
     LoadDefualtSettings();
 }
 //================================================================================
@@ -21,11 +25,18 @@ QStringList UI::GetDtatSetFilesList(QString path)
         QString fname= directoryIterator.next();
         if(fname.contains("/."))
             continue;
-        for(int i=0;i<filters.count();i++){
-            if(fname.endsWith(filters[i])){
+
+        for(int i=0;i<filters.count();i++)
+        {
+                   qDebug()<<filters[i];
+            if(fname.endsWith(filters[i]))
+            {
                 result.append(fname);
-                _labels.append("NC");}
-            break;
+                qDebug()<<"fn:"<<fname;
+                _labels.append("NC");
+                    break;
+            }
+
         }
     }
     return result;
@@ -35,7 +46,7 @@ bool UI::LoadLabels(QString path)
 {
 
     QFile file(path);
-    qDebug()<<path;
+    //qDebug()<<path;
     if(!QFile::exists(path))return false ;
     if(!file.open(QFile::ReadWrite))return false;
     qDebug()<<"path open ok";
@@ -67,6 +78,11 @@ void UI::LoadDefualtSettings()
 
         _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString());
     }
+      else{
+
+              ShowToast("previuse dataset loaded ",3000);
+
+      }
 
 
     _classifyList= LoadClassifyModel(settings.value("ClassifyList").toString());
@@ -172,6 +188,18 @@ void UI::ChartClera()
     QMetaObject::invokeMethod((QObject*)RootObject, "chartClear"
                               );
 }
+//================================================================================
+
+void UI::ShowToast(QString text,int delay)
+{
+    QMetaObject::invokeMethod((QObject*)RootObject, "showToast",
+                                  Q_ARG(QVariant, text),
+                                          Q_ARG(QVariant, delay)
+                              );
+}
+
+
+
 //================================================================================
 void UI::AppendToClassifyModel(QString( value))
 {

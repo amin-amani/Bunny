@@ -4,7 +4,7 @@ import QtQuick.Controls 2.5
 Rectangle {
     visible: true
     width: 640
-    height: 480
+    height: 600
 
     //title: qsTr("Bunny image annotator V1.0")
     property  string datasetPath: "..."
@@ -21,13 +21,13 @@ Rectangle {
 
     function showChartMetrics(text)
     {
-         staticPage.showMerics(text)
+        staticPage.showMerics(text)
 
     }
     function setDatasetAddress(path)
     {
-            datasetPath=path
-          form2.setDataSetPath(path)
+        datasetPath=path
+        form2.setDataSetPath(path)
 
     }
     function addToModel(value)
@@ -40,11 +40,43 @@ Rectangle {
 
     function displayImage(src)
     {
-    form2.displayImage(src)
+        form2.displayImage(src)
     }
     function setImageLabel(label)
     {
-    form2.setImageLabel(label)
+        form2.setImageLabel(label)
+    }
+    function showToast(label,delay)
+    {
+        toastText.text=label
+        toast.visible=true
+        toastTimer.interval=delay
+        toastTimer.start();
+    }
+    Timer
+    {
+        id: toastTimer
+        onTriggered: toast.visible=false
+    }
+    Rectangle
+    {
+        visible: false
+        id:toast
+        radius: 5
+        z:10
+        width:  parent.width/2
+        height: parent.height/16
+
+
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.bottom: parent.bottom
+        color: "gray";
+        Text {
+            id: toastText
+            anchors.centerIn: parent
+            color: "white"
+            text: qsTr("toas")
+        }
     }
     ListModel {
         id:mymodel
@@ -57,8 +89,8 @@ Rectangle {
         focus: true
         Keys.onPressed: {
             processManager.keyHandler(event.key)
-           // console.log(event.key)
-                }
+            // console.log(event.key)
+        }
         Page1Form {
 
 
@@ -70,12 +102,41 @@ Rectangle {
         }
         StaticsPage {
 
-        id:staticPage
+            id:staticPage
         }
         onCurrentIndexChanged: {
             form2.setDataSetPath(datasetPath)
         }
     }
+
+        Button {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            text: qsTr("<")
+                width: 100
+                height: 50
+                onClicked: {
+
+                    swipeView.currentIndex--
+                if(swipeView.currentIndex<0)swipeView.currentIndex=0
+                }
+
+        }
+
+        Button {
+            width: 100
+            height: 50
+            anchors.right:  parent.right
+            anchors.bottom: parent.bottom
+            text: qsTr(">")
+            onClicked: {
+
+                swipeView.currentIndex++
+             if(swipeView.currentIndex>2)swipeView.currentIndex=2
+            }
+        }
+
+}
 
 //    footer: TabBar {
 //        id: tabBar
@@ -92,5 +153,5 @@ Rectangle {
 //        onCurrentIndexChanged: swipeView.focus= true
 
 //    }
-}
+//}
 

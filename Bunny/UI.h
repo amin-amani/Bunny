@@ -49,6 +49,8 @@ public:
     void ChartClera();
     void ShowChartMetrics(QString metics);
     bool LoadLabels(QString path);
+
+    void ShowToast(QString text, int delay);
 signals:
 
 public slots:
