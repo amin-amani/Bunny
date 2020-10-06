@@ -5,12 +5,16 @@ import QtQuick.Dialogs 1.0
 import Qt.labs.folderlistmodel 2.1
 
 // FolderListModel
-Page {
+Rectangle {
 
     property url path
     property int i: 0
     width: 600
     height: 400
+    gradient: Gradient {
+             GradientStop { position: 0.0; color: "black" }
+             GradientStop { position: 1.0; color: "gray" }
+         }
 
     FileDialog {
         id: photoDirectoryFileDialog
@@ -34,6 +38,12 @@ Page {
         Button {
             height: 50
             width: 200
+            background: Rectangle {
+
+                   border.width: 1
+                   border.color: "black"
+                   radius: 4
+               }
             onClicked: photoDirectoryFileDialog.visible = true
             text: "Brows dataset ..."
         }
@@ -47,6 +57,12 @@ Page {
             spacing: 10
             Button {
                 text: "Add Class"
+                background: Rectangle {
+
+                       border.width: 1
+                       border.color: "black"
+                       radius: 4
+                   }
                 onClicked: {
                     mymodel.append({
                                        "name": classNameInput.text
@@ -68,6 +84,12 @@ Page {
                 }
             }
             Button {
+                background: Rectangle {
+
+                       border.width: 1
+                       border.color: "black"
+                       radius: 4
+                   }
                 text: "Clear List"
                 onClicked: {
                     mymodel.clear()
@@ -77,6 +99,12 @@ Page {
 
             Button {
                 text: "save List"
+                background: Rectangle {
+
+                       border.width: 1
+                       border.color: "black"
+                       radius: 4
+                   }
                 onClicked: {
 
                     processManager.saveResult()

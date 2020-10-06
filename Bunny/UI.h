@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE void addClassifyClasses(QString key);
     Q_INVOKABLE void remveClassifyClasses();
     Q_INVOKABLE void saveResult();
-    Q_INVOKABLE void classifyButtonClicked(QString name);
+    Q_INVOKABLE void classifyButtonClicked(int id);
     Q_INVOKABLE void setDatasetPath(QString path);
     Q_INVOKABLE void closeApp();
     void Init();

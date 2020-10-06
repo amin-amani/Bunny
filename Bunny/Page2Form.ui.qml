@@ -49,8 +49,8 @@ Page {
         id: classifyImage
         anchors.centerIn: parent
         source: "images/bugs_bunny.jpeg"
-        width: 500
-        height: 260
+        width: 216
+        height: 252
         scale: Qt.KeepAspectRatio
         Text {
             id: imageLable
@@ -60,11 +60,10 @@ Page {
         }
         MouseArea {
             anchors.fill: parent
-            onClicked: {
+            onClicked:
+            {
 
-                //                testImage.source = path + "/" + folderModel.get(
-                //                            i, "fileName")
-                //                i = i + 1
+
             }
         }
     }
@@ -79,9 +78,8 @@ Page {
             model: mymodel.count
             Button {
                 text: mymodel.get(index).name
-                onClicked: processManager.classifyButtonClicked(
-                               mymodel.get(
-                                   index).name) //buttonPressed(mymodel.get(index).name)
+                onClicked: processManager.classifyButtonClicked(index)//mymodel.get(index).name)
+                //buttonPressed(mymodel.get(index).name)
             }
         }
     }

@@ -6,7 +6,6 @@ Rectangle {
     width: 640
     height: 600
 
-    //title: qsTr("Bunny image annotator V1.0")
     property  string datasetPath: "..."
     function chartAddSeries(name,value)
 
@@ -85,6 +84,7 @@ Rectangle {
     SwipeView {
         id: swipeView
         anchors.fill: parent
+
         currentIndex:0// tabBar.currentIndex
         focus: true
         Keys.onPressed: {
@@ -112,6 +112,13 @@ Rectangle {
         Button {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
+            anchors.margins: 5
+            background: Rectangle {
+
+                   border.width: 1
+                   border.color: "black"
+                   radius: 4
+               }
             text: qsTr("<")
                 width: 100
                 height: 50
@@ -126,8 +133,15 @@ Rectangle {
         Button {
             width: 100
             height: 50
+            anchors.margins: 5
             anchors.right:  parent.right
             anchors.bottom: parent.bottom
+            background: Rectangle {
+
+                   border.width: 1
+                   border.color: "black"
+                   radius: 4
+               }
             text: qsTr(">")
             onClicked: {
 
@@ -138,20 +152,4 @@ Rectangle {
 
 }
 
-//    footer: TabBar {
-//        id: tabBar
-//        currentIndex: swipeView.currentIndex
-
-//        TabButton {
-//            text: qsTr("Settings")
-
-
-//        }
-//        TabButton {
-//            text: qsTr("Labeling")
-//        }
-//        onCurrentIndexChanged: swipeView.focus= true
-
-//    }
-//}
 

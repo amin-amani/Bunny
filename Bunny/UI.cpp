@@ -28,13 +28,13 @@ QStringList UI::GetDtatSetFilesList(QString path)
 
         for(int i=0;i<filters.count();i++)
         {
-                   qDebug()<<filters[i];
+
             if(fname.endsWith(filters[i]))
             {
                 result.append(fname);
-                qDebug()<<"fn:"<<fname;
+
                 _labels.append("NC");
-                    break;
+                break;
             }
 
         }
@@ -61,32 +61,25 @@ bool UI::LoadLabels(QString path)
         _fileList.append(QString(str[0]).trimmed() );
         _labels.append(QString(str[1]).trimmed() );
     }
-
-
     file.close();
-
     return true;
-
 }
 //================================================================================
 void UI::LoadDefualtSettings()
 {
     _currentIndex=0;
     DisplayDatasetPath( settings.value("DatasetPath").toString());
-      if(!LoadLabels( settings.value("DatasetPath").toString()+"/result.txt"))
+    if(!LoadLabels( settings.value("DatasetPath").toString()+"/result.txt"))
     {
 
         _fileList= GetDtatSetFilesList(settings.value("DatasetPath").toString());
     }
-      else{
+    else{
 
-              ShowToast("previuse dataset loaded ",3000);
+        ShowToast("previuse dataset loaded ",3000);
 
-      }
-
-
+    }
     _classifyList= LoadClassifyModel(settings.value("ClassifyList").toString());
-
     if(_fileList.count()<1)return;
     DisplayImage(_fileList[_currentIndex]);
     ChartAddSeries("NC",100);
@@ -193,12 +186,10 @@ void UI::ChartClera()
 void UI::ShowToast(QString text,int delay)
 {
     QMetaObject::invokeMethod((QObject*)RootObject, "showToast",
-                                  Q_ARG(QVariant, text),
-                                          Q_ARG(QVariant, delay)
+                              Q_ARG(QVariant, text),
+                              Q_ARG(QVariant, delay)
                               );
 }
-
-
 
 //================================================================================
 void UI::AppendToClassifyModel(QString( value))
@@ -244,12 +235,17 @@ void UI::closeApp()
     QCoreApplication::quit();
 }
 //================================================================================
+void UI::classifyButtonClicked(int id)
+{
+    _labels[_currentIndex]= _classifyList[id];
+    SetImageLabel( _classifyList[id]);
+    UpdateStatic();
+}
+//================================================================================
 void UI::keyHandler(int key)
 {
     if(KEY_ENTER==key){//enter
-
         if(_currentIndex<_fileList.count()-1)_currentIndex++;
-
         SetImageLabel(_labels[_currentIndex]);
         DisplayImage(_fileList[_currentIndex]);
         return;
@@ -258,7 +254,6 @@ void UI::keyHandler(int key)
         if(_currentIndex>0)_currentIndex--;
         SetImageLabel(_labels[_currentIndex]);
         DisplayImage(_fileList[_currentIndex]);
-
         return;
     }
     if(key>48 && key<58)
@@ -270,9 +265,7 @@ void UI::keyHandler(int key)
             _labels[_currentIndex]=_lastLable;
         }
         UpdateStatic();
-
     }
-
 }
 //================================================================================
 void UI::addClassifyClasses(QString key)
@@ -296,16 +289,13 @@ void UI::saveResult()
     if(!file.open(QFile::ReadWrite))return;
     for(int i=0;i<_fileList.count();i++)
     {
-        QString st=_fileList[i]+"\t"+_labels[i]+"\n";
+        QString st=_fileList[i].remove(settings.value("DatasetPath").toString()+"/")+"\t"+_labels[i]+"\n";
         file.write(st.toLatin1());
     }
     file.close();
+    ShowToast("save completed!",3000);
 }
-//================================================================================
-void UI::classifyButtonClicked(QString name)
-{
-    SetImageLabel(name);
-}
+
 //================================================================================
 void UI::setDatasetPath(QString path)
 {
